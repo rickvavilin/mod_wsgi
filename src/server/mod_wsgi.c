@@ -8101,7 +8101,11 @@ static int wsgi_setup_socket(WSGIProcessGroup *process)
     addr.sun_family = AF_UNIX;
     apr_cpystrn(addr.sun_path, process->socket_path, sizeof(addr.sun_path));
 
-    omask = umask(0077);
+    /* TODO: make parameter for server.
+    It need, when Apache running with PAM auth and it may access to socket under different users.
+
+    */
+    omask = umask(0000);
     rc = bind(sockfd, (struct sockaddr *)&addr, sizeof(addr));
 
     if (rc < 0 && errno == EADDRINUSE) {
