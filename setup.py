@@ -61,6 +61,7 @@ if REMOTE_TARBALL_URL or LOCAL_TARBALL_FILE:
 # installation.
 
 if WITH_TARBALL_PACKAGE:
+    print('With tarball')
     if REMOTE_TARBALL_URL:
         if not os.path.isfile(REMOTE_TARBALL_NAME):
             print('Downloading', REMOTE_TARBALL_URL)
@@ -320,6 +321,7 @@ with open(os.path.join(os.path.dirname(__file__),
             MPM_NAME=MPM_NAME, PROGNAME=PROGNAME,
             SHLIBPATH_VAR=SHLIBPATH_VAR), file=fp)
 
+
 # Work out location of Python library and how to link it.
 
 PYTHON_VERSION = get_python_config('VERSION')
@@ -423,7 +425,7 @@ if (not get_python_config('Py_ENABLE_SHARED') and
 
 # Now finally run distutils.
 # TODO: insert these files only if stdeb run
-data_files = ('/etc/apache2/mods-available', ['debian/wsgi.load', 'debian/wsgi.conf'])
+data_files = [('/etc/apache2/mods-available', ['config/wsgi.load', 'config/wsgi.conf'])]
 
 setup(name = 'mod_wsgi',
     version = _version(),
@@ -456,11 +458,13 @@ setup(name = 'mod_wsgi',
     ],
     packages = ['mod_wsgi', 'mod_wsgi.server', 'mod_wsgi.server.management',
         'mod_wsgi.server.management.commands', 'mod_wsgi.docs',
-        'mod_wsgi.images'],
-    package_dir = {'mod_wsgi': 'src', 'mod_wsgi.docs': 'docs/_build/html',
+        'mod_wsgi.images', 'mod_wsgi.config'],
+    package_dir = {'mod_wsgi': 'src', 'mod_wsgi.docs': 'docs/_build/html','mod_wsgi.config':'config',
         'mod_wsgi.images': 'images'},
     package_data = {'mod_wsgi.docs': _documentation(),
-        'mod_wsgi.images': ['snake-whiskey.jpg']},
+                    'mod_wsgi.config': ['wsgi.conf', 'wsgi.load'],
+                    'mod_wsgi.server': ['apxs_config.py'],
+                    'mod_wsgi.images': ['snake-whiskey.jpg']},
     data_files = data_files,
     ext_modules = [extension],
     entry_points = { 'console_scripts':
