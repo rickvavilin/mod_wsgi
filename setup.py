@@ -422,6 +422,8 @@ if (not get_python_config('Py_ENABLE_SHARED') and
     print(SHARED_LIBRARY_WARNING)
 
 # Now finally run distutils.
+# TODO: insert these files only if stdeb run
+data_files = ('/etc/apache2/mods-available', ['debian/wsgi.load', 'debian/wsgi.conf'])
 
 setup(name = 'mod_wsgi',
     version = _version(),
@@ -459,6 +461,7 @@ setup(name = 'mod_wsgi',
         'mod_wsgi.images': 'images'},
     package_data = {'mod_wsgi.docs': _documentation(),
         'mod_wsgi.images': ['snake-whiskey.jpg']},
+    data_files = data_files,
     ext_modules = [extension],
     entry_points = { 'console_scripts':
         ['mod_wsgi-express = mod_wsgi.server:main'],},
